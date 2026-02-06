@@ -22,3 +22,38 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ===========================================
+# SECURITY: Sensitive Data - DO NOT COMMIT
+# ===========================================
+
+# Proxy credentials (Webshare, etc.)
+webshare_proxies.json
+**/webshare_proxies.json
+proxy_config.json
+**/proxy_config.json
+bypass_config.json
+**/bypass_config.json
+
+# OAuth credentials
+youtube_oauth.json
+**/youtube_oauth.json
+**/client_secret*.json
+*.credentials.json
+
+# API keys and secrets
+.env
+.env.*
+*.env
+secrets.json
+**/secrets.json
+api_keys.json
+**/api_keys.json
+
+# Token files
+token.json
+**/token.json
+*.token
+
+# Rust build artifacts (already ignored but explicit)
+src-tauri/target/

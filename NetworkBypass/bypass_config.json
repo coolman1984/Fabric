@@ -1,0 +1,26 @@
+{
+  "active_proxy": {
+    "host": "212.108.115.49",
+    "port": 8080,
+    "proxy_type": "http",
+    "latency_ms": 18548.441648483276,
+    "last_tested": "2026-02-06T19:04:49.986593",
+    "youtube_works": true,
+    "security_validated": true
+  },
+  "backup_proxies": [
+    {
+      "host": "212.108.115.49",
+      "port": 8080,
+      "proxy_type": "http",
+      "latency_ms": 18548.441648483276,
+      "last_tested": "2026-02-06T19:04:49.986593",
+      "youtube_works": true,
+      "security_validated": true
+    }
+  ],
+  "last_updated": "2026-02-06T19:05:59.161412",
+  "session_id": "c3b2f946533c99d3",
+  "security_version": "2.0",
+  "auto_configured": true
+}

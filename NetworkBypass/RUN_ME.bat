@@ -1,5 +1,5 @@
 @echo off
-echo Starting Fabric Network Bypass...
+echo Starting Fabric Network Bypass - VPN Edition...
 cd /d "%~dp0"
-py bypass_gui.py
+py vpn_bypass.py
 pause
