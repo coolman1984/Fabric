@@ -39,10 +39,31 @@ function App() {
       appendOutput(event.payload.chunk);
     });
 
-    return () => {
-      unlistenPromise.then((unlisten) => unlisten());
+    // Keyboard Shortcuts
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+        e.preventDefault();
+        if (!isStreaming) runPattern();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+        e.preventDefault();
+        clearOutput();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        setSettingsOpen(true);
+      }
+      if (e.key === 'Escape') {
+        setSettingsOpen(false);
+      }
     };
-  }, []);
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      unlistenPromise.then(f => f());
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedPattern, inputText, isStreaming, vendor, model, temperature, topP, thinkingLevel]);
 
   const loadPatterns = async () => {
     try {
@@ -100,11 +121,15 @@ function App() {
         appendOutput(`> 📄 Content from ${inputText}\n\n`);
       }
 
+      // Load the actual pattern content (system.md)
+      appendOutput(`> 🔄 Running pattern: ${selectedPattern}...\n\n`);
+      const patternContent = await invoke<string>("get_pattern_content", { name: selectedPattern });
+
       const request = {
         vendor: vendor,
         model: model,
         api_key: apiKey,
-        system_prompt: selectedPattern,
+        system_prompt: patternContent,
         user_input: finalInput,
         temperature: temperature,
         top_p: topP,
@@ -231,7 +256,7 @@ function App() {
                   <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded border border-primary/20">Text Mode</span>
                 </div>
               </div>
-              <div className="h-48">
+              <div className="h-64">
                 <InputPanel />
               </div>
             </div>

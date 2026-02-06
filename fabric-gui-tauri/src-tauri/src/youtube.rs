@@ -16,15 +16,26 @@ pub async fn get_youtube_transcript(
         .join("resources")
         .join("youtube_transcript.py");
 
-    let mut script_path = python_script;
+    let mut script_path = python_script.clone();
+    
     if !script_path.exists() {
-         let mut dev_path = PathBuf::from("src-tauri");
-         dev_path.push("resources");
-         dev_path.push("youtube_transcript.py");
-         if dev_path.exists() {
-             script_path = dev_path;
-         } else {
-             return Err(format!("YouTube script not found at {:?}", script_path));
+         // Try project root relative paths
+         let fallbacks = [
+             PathBuf::from("src-tauri").join("resources").join("youtube_transcript.py"),
+             PathBuf::from("resources").join("youtube_transcript.py"),
+         ];
+         
+         let mut found = false;
+         for fallback in fallbacks {
+             if fallback.exists() {
+                 script_path = fallback;
+                 found = true;
+                 break;
+             }
+         }
+         
+         if !found {
+             return Err(format!("YouTube script not found. Tried: {:?} and fallbacks.", python_script));
          }
     }
 

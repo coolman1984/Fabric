@@ -37,27 +37,30 @@ def get_transcript(video_url, languages=['en', 'en-US', 'en-GB'], include_timest
         return {"error": f"Invalid YouTube URL or ID: {video_url}"}
 
     try:
-        transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+        # In version 1.2.4, we need to instantiate the class
+        ytt = YouTubeTranscriptApi()
         
         try:
-            transcript = transcript_list.find_transcript(languages)
+            data = ytt.fetch(video_id, languages=languages)
         except:
-            # Fallback to first available
-            transcript = next(iter(transcript_list))
+            # Fallback to no language preference
+            data = ytt.fetch(video_id)
             
-        data = transcript.fetch()
-        
         if include_timestamps:
             lines = []
             for t in data:
-                start = int(t['start'])
-                minutes = start // 60
-                seconds = start % 60
+                # Handle both attribute and subscript access for robustness
+                start = getattr(t, 'start', None) if not isinstance(t, dict) else t.get('start')
+                text = getattr(t, 'text', '') if not isinstance(t, dict) else t.get('text', '')
+                
+                start_int = int(start) if start is not None else 0
+                minutes = start_int // 60
+                seconds = start_int % 60
                 timestamp = f"[{minutes:02d}:{seconds:02d}] "
-                lines.append(f"{timestamp}{t['text']}")
+                lines.append(f"{timestamp}{text}")
             full_text = "\n".join(lines)
         else:
-            full_text = ' '.join([t['text'] for t in data])
+            full_text = ' '.join([getattr(t, 'text', '') if not isinstance(t, dict) else t.get('text', '') for t in data])
             
         # Clean up
         full_text = re.sub(r'\s+', ' ', full_text)

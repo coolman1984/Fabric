@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type InputMode = "text" | "url" | "youtube";
+export type InputMode = "text" | "url" | "youtube";
 
 interface AIStore {
     // Input
@@ -31,11 +31,11 @@ export const useAIStore = create<AIStore>((set) => ({
     isStreaming: false,
     error: null,
 
-    setInputMode: (mode) => set({ inputMode: mode }),
-    setInputText: (text) => set({ inputText: text }),
+    setInputMode: (inputMode) => set({ inputMode }),
+    setInputText: (inputText) => set({ inputText }),
     setIncludeTimestamps: (includeTimestamps) => set({ includeTimestamps }),
     appendOutput: (chunk) => set((state) => ({ output: state.output + chunk })),
     clearOutput: () => set({ output: "", error: null }),
-    setStreaming: (streaming) => set({ isStreaming: streaming }),
-    setError: (error) => set({ error, isStreaming: false }),
+    setStreaming: (isStreaming) => set({ isStreaming }),
+    setError: (error) => set({ error }),
 }));
