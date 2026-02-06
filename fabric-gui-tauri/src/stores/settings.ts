@@ -16,6 +16,7 @@ interface Settings {
     temperature: number;
     topP: number;
     strategy: string;
+    thinkingLevel: number; // 0 (off), 1 (normal), 2 (deep)
 
     // Theme
     theme: "light" | "dark" | "system";
@@ -28,6 +29,7 @@ interface SettingsStore extends Settings {
     setTemperature: (temp: number) => void;
     setTopP: (topP: number) => void;
     setStrategy: (strategy: string) => void;
+    setThinkingLevel: (level: number) => void;
     setTheme: (theme: "light" | "dark" | "system") => void;
     getApiKey: (vendor: Vendor) => string;
 }
@@ -45,6 +47,7 @@ export const useSettingsStore = create<SettingsStore>()(
             temperature: 0.7,
             topP: 0.9,
             strategy: "none",
+            thinkingLevel: 0,
             theme: "dark",
 
             setApiKey: (vendor, key) => {
@@ -66,6 +69,7 @@ export const useSettingsStore = create<SettingsStore>()(
             setTemperature: (temperature) => set({ temperature }),
             setTopP: (topP) => set({ topP }),
             setStrategy: (strategy) => set({ strategy }),
+            setThinkingLevel: (thinkingLevel) => set({ thinkingLevel }),
             setTheme: (theme) => set({ theme }),
 
             getApiKey: (vendor) => {
